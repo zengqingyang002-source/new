@@ -1,0 +1,14 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\13226\\Documents\\Codex\\2026-06-09\\files-mentioned-by-the-user-docx\\edu_dify_platform\\backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [34308] using WatchFiles
+INFO:     Started server process [27000]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app\db\init_db.py', 'app\__init__.py', 'app\services\reporting.py', 'app\db\session.py', 'run.py', 'app\services\dify.py', 'app\services\evaluator.py', 'app\schemas.py', 'app\core\security.py', 'app\api\routes.py', 'app\main.py', 'app\core\config.py', 'app\services\file_parser.py', 'app\api\deps.py', 'app\models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27000]
+INFO:     Started server process [28852]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
