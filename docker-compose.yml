@@ -1,0 +1,63 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: edu_dify_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: edu_dify_platform
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: edu_dify_backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_NAME: Edu Dify Platform
+      APP_ENV: docker
+      APP_SECRET: local-demo-secret
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+      DATABASE_URL: mysql+pymysql://root:123456@mysql:3306/edu_dify_platform?charset=utf8mb4
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: edu_dify_platform
+      MYSQL_USER: root
+      MYSQL_PASSWORD: "123456"
+      AUTO_CREATE_DATABASE: "true"
+      AUTO_SEED_DEMO_DATA: "true"
+      DIFY_BASE_URL: http://192.168.110.27
+      DIFY_TIMEOUT_SECONDS: 35
+      DIFY_FALLBACK_ENABLED: "true"
+      DIFY_CUSTOMER_CHAT_API_KEY: ${DIFY_CUSTOMER_CHAT_API_KEY:-}
+      DIFY_LEAD_WORKFLOW_API_KEY: ${DIFY_LEAD_WORKFLOW_API_KEY:-}
+      DIFY_EMPLOYEE_CHAT_API_KEY: ${DIFY_EMPLOYEE_CHAT_API_KEY:-}
+      DIFY_REPORT_WORKFLOW_API_KEY: ${DIFY_REPORT_WORKFLOW_API_KEY:-}
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: edu_dify_frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_PROXY_TARGET: http://backend:8000
+    ports:
+      - "5173:5173"
+
+volumes:
+  mysql_data:
